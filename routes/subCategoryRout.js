@@ -1,19 +1,29 @@
 const express = require('express')
 const  {createSubCategory,
-        getsubCategories,
-        getsubCategory,
-        
+        getSubCategories,
+        getSubCategory,
+        updateSubCategory,
+        deleteSubCategory,
+        setCategoryIdToBody
 } = require('../services/subCategoryService')
 
-const router = express.Router()
+const router = express.Router({mergeParams:true})
+const {protect, allowedTo} = require('../services/authService')
+const  {createSubCategoryValidator,
+        getSubCategoryValidator,
+        updateSubCategoryValidator,
+        deleteSubCategoryValidator
 
-const {createSubCategoryValidator}= require('../utils/validators/subCategoryValidator')
-const { getCategories } = require('../services/categoryService')
+        }= require('../utils/validators/subCategoryValidator');
 
 
-router.route('/').post(createSubCategoryValidator,createSubCategory).
-get(getsubCategories)
 
-router.route('/:id').get(getsubCategory)
+        router.route('/')
+        .post(protect,allowedTo('admin','manger'),setCategoryIdToBody,createSubCategoryValidator,createSubCategory)
+        .get(protect,getSubCategories);
+        router.route('/:id')
+        .get(protect,getSubCategoryValidator,getSubCategory)
+        .put(protect,allowedTo('admin','manger'),updateSubCategoryValidator,updateSubCategory)
+        .delete(protect,allowedTo('admin'),deleteSubCategoryValidator,deleteSubCategory)
 
 module.exports = router

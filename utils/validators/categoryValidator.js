@@ -14,7 +14,15 @@ exports.createCategoryValidator = [
     .withMessage('Too short category name')
     .isLength({ max: 32 })
     .withMessage('Too long category name'),
+    (req,res,next)=>{
+      console.log('hello')
+      next()
+    },
   validatorMiddleware,
+  (req,res,next)=>{
+    console.log('hello')
+    next()
+  },
 ];
 
 exports.updateCategoryValidator = [

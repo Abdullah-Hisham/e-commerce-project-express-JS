@@ -1,14 +1,14 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const path = require ('path')
 
 dotenv.config({ path: 'config.env' });
 const ApiError = require('./utils/ApiError');
 const globalError = require('./middleware/errorMiddleware');
 const dbConnection = require('./config/database');
-const categoryRoute = require('./routes/categoryRoute');
-const subCategoryRoute = require('./routes/subCategoryRout')
-// Connect with db
+const mountRoutes = require('./routes');
+
 dbConnection();
 
 // express app
@@ -16,15 +16,14 @@ const app = express();
 
 // Middlewares
 app.use(express.json());
-
+app.use(express.static(path.join(__dirname,'upload')))
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
   console.log(`mode: ${process.env.NODE_ENV}`);
 }
 
-// Mount Routes
-app.use('/api/v1/categories', categoryRoute);
-app.use('/api/v1/subcategories',subCategoryRoute)
+
+mountRoutes(app);
 app.all('*', (req, res, next) => {
   next(new ApiError(`Can't find this route: ${req.originalUrl}`, 400));
 });
