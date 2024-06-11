@@ -12,7 +12,7 @@ const authService = require('../services/authService');
 
 const router = express.Router();
 
-router.use(authService.protect, authService.allowedTo('user'));
+router.use(authService.protect, authService.allowedTo('user','admin'));
 router
     .route('/')
     .post(addProductToCart)

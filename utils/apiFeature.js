@@ -7,6 +7,7 @@ class ApiFeatures{
     }
 
     filter(){
+        // eslint-disable-next-line node/no-unsupported-features/es-syntax
         const queryStringObj = {...this.queryString};
         const excludedFields = ['page','sort', 'limit', 'fields'];
         excludedFields.forEach(el => delete queryStringObj[el]);
@@ -63,6 +64,7 @@ class ApiFeatures{
         pagination.currentPage=page
         pagination.limit = limit
         pagination.numberOfPages = Math.ceil(countDocuments / limit)
+        pagination.countDocuments = countDocuments
         const endPage = page * limit
         
         if(endPage > countDocuments){

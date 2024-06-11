@@ -1,27 +1,54 @@
 const express = require('express');
 const {
-  getReviewValidator,
-  createReviewValidator,
-  updateReviewValidator,
-  deleteReviewValidator,
-} = require('../utils/validators/reviewValidator');
+  getProductValidator,
+  createProductValidator,
+  updateProductValidator,
+  deleteProductValidator,
+} = require('../utils/validators/productvaliddator');
+
 const {
-  getReviews,
-  getReview,
-  createReview,
-  updateReview,
-  deleteReview,
-  
-} = require('../services/reviewService');
-const {protect, allowedTo} = require('../services/authService')
-const reviewsRoute = require('./reviewRoute')
+  getProducts,
+  getProduct,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  uploadProductImages,
+  resizeProductImages,
+} = require('../services/productServices');
+const authService = require('../services/authService');
+const reviewsRoute = require('./reviewRoute');
+
 const router = express.Router();
-router.use(':/productId/reviews',reviewsRoute)
-router.route('/').get(protect,getReviews).post(protect,allowedTo("admin","manger"),createReviewValidator, createReview);
+
+router.use('/:productId/reviews', reviewsRoute);
+
+router
+  .route('/')
+  .get(getProducts)
+  .post(
+    authService.protect,
+    authService.allowedTo('admin', 'manager'),
+    uploadProductImages,
+    resizeProductImages,
+    createProductValidator,
+    createProduct
+  );
 router
   .route('/:id')
-  .get(protect, getReviewValidator, getReview)
-  .put(protect,allowedTo("admin","manger"),updateReviewValidator, updateReview)
-  .delete(protect,allowedTo("admin"),deleteReviewValidator, deleteReview);
+  .get(getProductValidator, getProduct)
+  .put(
+    authService.protect,
+    authService.allowedTo('admin', 'manager'),
+    uploadProductImages,
+    resizeProductImages,
+    updateProductValidator,
+    updateProduct
+  )
+  .delete(
+    authService.protect,
+    authService.allowedTo('admin'),
+    deleteProductValidator,
+    deleteProduct
+  );
 
 module.exports = router;

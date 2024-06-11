@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const path = require ('path')
 
 dotenv.config({ path: 'config.env' });
+const cors = require('cors')
 const ApiError = require('./utils/ApiError');
 const globalError = require('./middleware/errorMiddleware');
 const dbConnection = require('./config/database');
@@ -14,6 +15,11 @@ dbConnection();
 // express app
 const app = express();
 
+const corsOptions = {
+  origin: 'http://localhost:3000',
+};
+
+app.use(cors(corsOptions))
 // Middlewares
 app.use(express.json());
 app.use(express.static(path.join(__dirname,'upload')))

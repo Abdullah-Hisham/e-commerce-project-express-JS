@@ -2,9 +2,9 @@ const asyncHandler = require('express-async-handler')
 // eslint-disable-next-line import/no-extraneous-dependencies
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const crypto = require('crypto')
 const ApiError = require('../utils/ApiError')
 const User = require('../models/userModel')
-const crypto = require('crypto')
 const sendEmail = require('../utils/sendEmail')
 
 const createToken= (payload)=>jwt.sign({userId:payload},"fasdfas-fasdf-afad-hrg-shaerfd-dfasdg-hgqweg-fgasd",{
